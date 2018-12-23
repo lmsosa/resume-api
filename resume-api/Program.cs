@@ -10,13 +10,25 @@ using Microsoft.Extensions.Logging;
 
 namespace resume_api
 {
+    /// <summary>
+    /// Main Program
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Main entry point
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        /// Web host builder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();

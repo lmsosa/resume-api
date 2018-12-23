@@ -1,22 +1,39 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using resume_api.ModelBuilders;
 
 namespace resume_api.Model
 {
+    /// <summary>
+    /// Contexto de Base de Datos para Curriculums
+    /// </summary>
     public class ResumeContext : DbContext
     {
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Crea una nueva instancia de <see cref="ResumeContext"/>
+        /// </summary>
+        /// <param name="configuration"></param>
         public ResumeContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-        public DbSet<Experience> Experiences { get; set; }
 
+        /// <summary>
+        /// DbSet de Experiencias
+        /// </summary>
+        public DbSet<Experiencia> Experiences { get; set; }
+
+        /// <summary>
+        /// DbSet de Curriculums
+        /// </summary>
+        public DbSet<Curriculum> Curriculum { get; set; }
+
+        /// <summary>
+        /// Delegado del evento Configuring
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -25,6 +42,16 @@ namespace resume_api.Model
                 optionsBuilder.UseSqlServer(constring, o => o.MigrationsAssembly("resume-api"));
             }
 
+        }
+
+        /// <summary>
+        /// Delegado del evento Model Creating
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.BuildEducacion();
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

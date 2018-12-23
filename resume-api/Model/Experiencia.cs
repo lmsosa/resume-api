@@ -5,12 +5,17 @@ namespace resume_api.Model
     /// <summary>
     /// Represents a single work experience
     /// </summary>
-    public class Experience
+    public class Experiencia
     {
         /// <summary>
         /// Experience identifier
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Id del curriculum
+        /// </summary>
+        public int CurriculumId { get; set; }
 
         /// <summary>
         /// Company
