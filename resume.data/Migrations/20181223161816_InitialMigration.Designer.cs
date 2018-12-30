@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using resume_api.Model;
+using Resume.Data.Context;
 using System;
 
 #pragma warning disable 612, 618, 1591
-namespace resume_api.Migrations
+namespace Resume.Data.Migrations
 {
     [DbContext(typeof(ResumeContext))]
     [Migration("20181223161816_InitialMigration")]

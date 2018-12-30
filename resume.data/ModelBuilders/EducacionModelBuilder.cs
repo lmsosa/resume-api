@@ -1,12 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using resume_api.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Resume.Domain;
 
-namespace resume_api.ModelBuilders
+namespace Resume.Data.ModelBuilders
 {
     /// <summary>
     /// Model builder de Educacion

@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using resume_api.Model;
+using Resume.Api.Model;
+using Resume.Data.Context;
+using Resume.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
-namespace resume_api.Controllers
+namespace Resume.Api.Controllers
 {
     /// <summary>
     /// Controller de Curriculums
@@ -14,46 +18,57 @@ namespace resume_api.Controllers
     public class CurriculumController : ControllerBase
     {
         private readonly ResumeContext _dbContext;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Creates a new instance of <see cref="CurriculumController"/>
         /// </summary>
         /// <param name="dbContext"></param>
-        public CurriculumController(ResumeContext dbContext)
+        /// <param name="mapper"></param>
+        public CurriculumController(ResumeContext dbContext, IMapper mapper)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         /// <summary>
         /// Crea un nuevo curriculum
         /// </summary>
-        /// <param name="curriculum"></param>
+        /// <param name="curriculumModel">Curriculum</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create(Curriculum curriculum)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CurriculumIdentifiableModel>> Create(CurriculumBasicModel curriculumModel)
         {
-            await _dbContext.Curriculum.AddAsync(curriculum);
-            _dbContext.SaveChanges();
-            return Ok();
+            var curriculum = _mapper.Map<Curriculum>(curriculumModel);
+            _dbContext.Curriculum.Add(curriculum);
+            await _dbContext.SaveChangesAsync();
+
+            var result = _mapper.Map<CurriculumIdentifiableModel>(curriculum);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         /// <summary>
         /// Crea un nuevo curriculum
         /// </summary>
-        /// <param name="curriculum"></param>
+        /// <param name="id">Identificador del curriculum</param>
+        /// <param name="curriculum">Curriculum a modificar</param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Curriculum curriculum)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(int id, CurriculumBasicModel curriculum)
         {
-            var curriculumExistente = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == curriculum.Id);
-            if (curriculumExistente == null)
-            {
-                return NotFound("No se encontró el curriculum");
-            }
+            var curriculumExistente = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == id);
+            if (curriculumExistente is null)
+                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
+
             curriculumExistente.Nombre = curriculum.Nombre;
             curriculumExistente.Email = curriculum.Email;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return NoContent();
         }
 
@@ -62,26 +77,30 @@ namespace resume_api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Curriculum>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CurriculumModel>>> GetAll()
         {
             var curriculums = await _dbContext.Curriculum.ToListAsync();
-            return Ok(curriculums);
+            return _mapper.Map<List<CurriculumModel>>(curriculums);
         }
 
         /// <summary>
         /// Devuelve un curriculum por su identificador
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Identificador del curriculum a devolver</param>
+        /// <returns>El curriculum solicitado</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Curriculum>>> GetById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CurriculumModel>> GetById(int id)
         {
-            var curriculums = await _dbContext.Curriculum
+            var curriculum = await _dbContext.Curriculum
                                             .Include(x => x.Experiencias)
                                             .Include(x => x.Educacion)
                                             .Include(x => x.Cursos)
-                                            .ToListAsync();
-            return Ok(curriculums);
+                                            .FirstOrDefaultAsync(x => x.Id == id);
+            if (curriculum is null)
+                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
+            return _mapper.Map<CurriculumModel>(curriculum);
         }
 
         /// <summary>
@@ -90,17 +109,17 @@ namespace resume_api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
             var curriculumExistente = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == id);
-            if (curriculumExistente == null)
-            {
-                return NotFound("No se encontró el curriculum");
-            }
-            _dbContext.Curriculum.Remove(curriculumExistente);
-            _dbContext.SaveChanges();
-            return NoContent();
+            if (curriculumExistente is null)
+                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
 
+            _dbContext.Curriculum.Remove(curriculumExistente);
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

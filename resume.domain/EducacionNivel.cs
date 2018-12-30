@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Resume.Api.Model
+namespace Resume.Domain
 {
     /// <summary>
     /// Nivel de la educación

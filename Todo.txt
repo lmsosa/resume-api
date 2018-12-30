@@ -1,0 +1,12 @@
+Authentication / Authorization
+
+Domain library / Automapper
+
+Validation
+
+Filtering / Sorting / Pagination
+
+Patches
+
+Hateoas
+

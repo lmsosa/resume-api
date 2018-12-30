@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace resume_api.Migrations
+namespace Resume.Data.Migrations
 {
     /// <summary>
     /// Initial Migration

@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace resume_api.Extensions
+namespace Resume.Api.Extensions
 {
     /// <summary>
     /// Extensions for Swagger

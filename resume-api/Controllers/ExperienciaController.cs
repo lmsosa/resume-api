@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using resume_api.Model;
+using Resume.Api.Model;
+using Resume.Data.Context;
+using Resume.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 
-namespace resume_api.Controllers
+namespace Resume.Api.Controllers
 {
     /// <summary>
     /// Exposes endpoints for managing experience data
@@ -15,66 +18,74 @@ namespace resume_api.Controllers
     public class ExperienciaController : ControllerBase
     {
         private readonly ResumeContext _dbContext;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Creates a new instance of <see cref="ExperienciaController"/>
         /// </summary>
         /// <param name="dbContext"></param>
-        public ExperienciaController(ResumeContext dbContext)
+        /// <param name="mapper"></param>
+        public ExperienciaController(ResumeContext dbContext, IMapper mapper)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         /// <summary>
-        /// Creates a new experience entry
+        /// Agrega una experiencia laboral a un curriculum
         /// </summary>
-        /// <param name="idCurriculum"></param>
-        /// <param name="experience"></param>
+        /// <param name="idCurriculum">Identificador del curriculum sobre el cual agregar la experiencia laboral</param>
+        /// <param name="experienciaModel">Experiencia a agregar</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create(int idCurriculum, Experiencia experience)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ExperienciaModel>> Create(int idCurriculum, ExperienciaBasicModel experienciaModel)
         {
-            var curriculum = _dbContext.Curriculum.FirstOrDefault(x => x.Id == idCurriculum);
+            var curriculum = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == idCurriculum);
             if (curriculum == null)
-            {
-                return NotFound("No se encontró el curriculum");
-            }
-            curriculum.Experiencias.Add(experience);
+                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
+
+            var experiencia = _mapper.Map<Experiencia>(experienciaModel);
+            curriculum.Experiencias.Add(experiencia);
             await _dbContext.SaveChangesAsync();
-            return Ok();
+
+            var response = _mapper.Map<ExperienciaModel>(experiencia);
+            return CreatedAtAction(nameof(GetById), new { idCurriculum = response.CurriculumId, id = response.Id }, response);
         }
 
         /// <summary>
         /// Actualiza una experiencia existente
         /// </summary>
-        /// <param name="idCurriculum"></param>
-        /// <param name="id"></param>
-        /// <param name="experience"></param>
+        /// <param name="idCurriculum">Identificador del curriculum sobre el cual modificar la experiencia laboral</param>
+        /// <param name="id">Identificador de la experiencia laboral a modificar</param>
+        /// <param name="experienciaModel">Experiencia laboral modificada</param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int idCurriculum, int id, Experiencia experience)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(int idCurriculum, int id, ExperienciaBasicModel experienciaModel)
         {
             var existingExperience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
             if (existingExperience == null)
-                return NotFound();
+                return NotFound(ErrorDetails.For("No se encontró la experiencia laboral"));
 
-            existingExperience.Empresa = experience.Empresa;
-            existingExperience.Cargo = experience.Cargo;
-            existingExperience.FechaInicio = experience.FechaInicio;
-            existingExperience.FechaFin = experience.FechaFin;
-            existingExperience.DescripcionTareas = experience.DescripcionTareas;
-
-            _dbContext.SaveChanges();
-            return Ok();
+            _mapper.Map(experienciaModel, existingExperience);
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="idCurriculum"></param>
-        /// <param name="id"></param>
+        /// <param name="idCurriculum">Identificador del curriculum sobre el cual se desea eliminar la experiencia laboral</param>
+        /// <param name="id">Idetificador de la experiencia laboral</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int idCurriculum, int id)
         {
             var existingExperience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
@@ -82,42 +93,44 @@ namespace resume_api.Controllers
                 return NotFound();
 
             _dbContext.Experiences.Remove(existingExperience);
+            await _dbContext.SaveChangesAsync();
             return NoContent();
         }
 
         /// <summary>
         /// Devuelve todas las experiencias en un curriculum
         /// </summary>
-        /// <param name="idCurriculum"></param>
-        /// <returns></returns>
+        /// <param name="idCurriculum">Identificador del curriculum</param>
+        /// <returns>Listado de experiencias del curriculum indicado</returns>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Experiencia>>> GetAll(int idCurriculum)
         {
             var curriculum = await _dbContext.Curriculum
                                         .Include(x => x.Experiencias)
                                         .FirstOrDefaultAsync(x => x.Id == idCurriculum);
             if (curriculum == null)
-            {
-                return NotFound("No se encontró el curriculum");
-            }
-
+                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
             var experiences = curriculum.Experiencias;
             return Ok(experiences);
         }
 
         /// <summary>
-        /// Devuelve un item de experiencia por id de curriculum y de experiencia
+        /// Recupera una experiencia laboral por id de curriculum y de experiencia
         /// </summary>
-        /// <param name="idCurriculum"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="idCurriculum">Identificador del curriculum sobre el que se quiere recuperar la experiencia laboral</param>
+        /// <param name="id">Identificador de la experiencia laboral a recuperar</param>
+        /// <returns>Experiencia laboral solicitada</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Experiencia>>> GetById(int idCurriculum, int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Experiencia>> GetById(int idCurriculum, int id)
         {
-            var experience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
-            if (experience == null)
-                return NotFound();
-            return Ok(experience);
+            var experiencia = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
+            if (experiencia == null)
+                return NotFound(ErrorDetails.For("No se encontró la experiencia"));
+            return experiencia;
         }
     }
 }

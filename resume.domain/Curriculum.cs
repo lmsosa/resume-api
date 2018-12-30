@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace resume_api.Model
+namespace Resume.Domain
 {
     /// <summary>
     /// Representa un curriculum

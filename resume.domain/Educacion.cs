@@ -1,4 +1,4 @@
-﻿namespace resume_api.Model
+﻿namespace Resume.Domain
 {
     /// <summary>
     /// Representa un item de educación recibida

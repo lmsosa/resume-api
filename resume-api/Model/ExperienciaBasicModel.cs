@@ -1,22 +1,12 @@
 ﻿using System;
 
-namespace resume_api.Model
+namespace Resume.Api.Model
 {
     /// <summary>
-    /// Represents a single work experience
+    /// Representa una experiencia laboral
     /// </summary>
-    public class Experiencia
+    public class ExperienciaBasicModel
     {
-        /// <summary>
-        /// Experience identifier
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Id del curriculum
-        /// </summary>
-        public int CurriculumId { get; set; }
-
         /// <summary>
         /// Company
         /// </summary>

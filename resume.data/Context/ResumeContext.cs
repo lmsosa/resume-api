@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using resume_api.ModelBuilders;
+using Resume.Data.ModelBuilders;
+using Resume.Domain;
 
-namespace resume_api.Model
+namespace Resume.Data.Context
 {
     /// <summary>
     /// Contexto de Base de Datos para Curriculums
@@ -39,9 +40,8 @@ namespace resume_api.Model
             if (!optionsBuilder.IsConfigured)
             {
                 var constring = _configuration.GetConnectionString("Resume");
-                optionsBuilder.UseSqlServer(constring, o => o.MigrationsAssembly("resume-api"));
+                optionsBuilder.UseSqlServer(constring, o => o.MigrationsAssembly(this.GetType().Assembly.GetName().Name));
             }
-
         }
 
         /// <summary>

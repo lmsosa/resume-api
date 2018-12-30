@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace resume_api
+namespace Resume.Api
 {
     /// <summary>
     /// Main Program
