@@ -17,8 +17,14 @@ namespace Resume.Api.Controllers
     [ApiController]
     public class CurriculumController : ControllerBase
     {
+        #region Fields
+
         private readonly ResumeContext _dbContext;
         private readonly IMapper _mapper;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Creates a new instance of <see cref="CurriculumController"/>
@@ -30,6 +36,10 @@ namespace Resume.Api.Controllers
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
+        #endregion
+
+        #region Endpoints
 
         /// <summary>
         /// Crea un nuevo curriculum
@@ -121,5 +131,7 @@ namespace Resume.Api.Controllers
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
+
+        #endregion
     }
 }

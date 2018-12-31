@@ -17,8 +17,14 @@ namespace Resume.Api.Controllers
     [ApiController]
     public class ExperienciaController : ControllerBase
     {
+        #region Fields
+
         private readonly ResumeContext _dbContext;
         private readonly IMapper _mapper;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Creates a new instance of <see cref="ExperienciaController"/>
@@ -31,12 +37,16 @@ namespace Resume.Api.Controllers
             _mapper = mapper;
         }
 
+        #endregion
+
+        #region Create
+
         /// <summary>
         /// Agrega una experiencia laboral a un curriculum
         /// </summary>
         /// <param name="idCurriculum">Identificador del curriculum sobre el cual agregar la experiencia laboral</param>
         /// <param name="experienciaModel">Experiencia a agregar</param>
-        /// <returns></returns>
+        /// <returns>Experiencia laboral creada</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
@@ -61,7 +71,7 @@ namespace Resume.Api.Controllers
         /// <param name="idCurriculum">Identificador del curriculum sobre el cual modificar la experiencia laboral</param>
         /// <param name="id">Identificador de la experiencia laboral a modificar</param>
         /// <param name="experienciaModel">Experiencia laboral modificada</param>
-        /// <returns></returns>
+        /// <returns>Este método no devuelve ningún contenido</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
@@ -82,7 +92,7 @@ namespace Resume.Api.Controllers
         /// </summary>
         /// <param name="idCurriculum">Identificador del curriculum sobre el cual se desea eliminar la experiencia laboral</param>
         /// <param name="id">Idetificador de la experiencia laboral</param>
-        /// <returns></returns>
+        /// <returns>Este método no devuelve ningún contenido</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -105,15 +115,15 @@ namespace Resume.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Experiencia>>> GetAll(int idCurriculum)
+        public async Task<ActionResult<IEnumerable<ExperienciaModel>>> GetAll(int idCurriculum)
         {
             var curriculum = await _dbContext.Curriculum
                                         .Include(x => x.Experiencias)
                                         .FirstOrDefaultAsync(x => x.Id == idCurriculum);
             if (curriculum == null)
                 return NotFound(ErrorDetails.For("No se encontró el curriculum"));
-            var experiences = curriculum.Experiencias;
-            return Ok(experiences);
+
+            return _mapper.Map<List<ExperienciaModel>>(curriculum.Experiencias);
         }
 
         /// <summary>
@@ -125,12 +135,14 @@ namespace Resume.Api.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Experiencia>> GetById(int idCurriculum, int id)
+        public async Task<ActionResult<ExperienciaModel>> GetById(int idCurriculum, int id)
         {
             var experiencia = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
             if (experiencia == null)
                 return NotFound(ErrorDetails.For("No se encontró la experiencia"));
-            return experiencia;
+            return _mapper.Map<ExperienciaModel>(experiencia);
         }
+
+        #endregion        
     }
 }
