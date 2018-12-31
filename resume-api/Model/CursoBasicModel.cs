@@ -1,4 +1,4 @@
-﻿namespace Resume.Api.Model
+﻿namespace Resume.WebApi.Model
 {
     /// <summary>
     /// Representa un curso realizado

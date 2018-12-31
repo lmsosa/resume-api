@@ -1,4 +1,4 @@
-﻿namespace Resume.Domain
+﻿namespace Resume.Domain.Entities
 {
     /// <summary>
     /// Representa un curso realizado

@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Resume.Api.Extensions;
+using Resume.WebApi.Extensions;
 using Resume.Data.Context;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using MediatR;
+using MediatR.Pipeline;
+using Resume.Application.Curriculums.Commands.CrearCurriculum;
+using Resume.Api.Middlewares;
 
-namespace Resume.Api
+namespace Resume.WebApi
 {
     /// <summary>
     /// Startup
@@ -43,6 +47,13 @@ namespace Resume.Api
                         options.UseSqlServer(Configuration.GetConnectionString("Resume")));
             services.AddAutoMapperConfig(typeof(Startup));
 
+            // Add MediatR
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddMediatR(typeof(CrearCurriculumCommand).Assembly);
+
+
             services.AddSwaggerDocumentation();
         }
 
@@ -62,6 +73,7 @@ namespace Resume.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseMiddleware<HandleExceptionsMiddleware>();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

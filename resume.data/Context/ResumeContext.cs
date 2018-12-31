@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Resume.Data.ModelBuilders;
-using Resume.Domain;
+using Resume.Domain.Entities;
 
 namespace Resume.Data.Context
 {

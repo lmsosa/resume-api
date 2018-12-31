@@ -1,25 +1,20 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using MediatR;
 
-namespace Resume.WebApi.Model
+namespace Resume.Application.Curriculums.Commands.CrearCurriculum
 {
     /// <summary>
-    /// Representa un curriculum
+    /// Comando para crear un curriculum
     /// </summary>
-    public class CurriculumBasicModel 
+    public class CrearCurriculumCommand : IRequest<int>
     {
         /// <summary>
         /// Nombre completo de la persona
         /// </summary>
-        [Required]
         public string Nombre { get; set; }
 
         /// <summary>
         /// Dirección de correo electrónico
         /// </summary>
-        [Required]
-        [EmailAddress]
         public string Email { get; set; }
-
     }
 }

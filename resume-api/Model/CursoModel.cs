@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Resume.Api.Model
+namespace Resume.WebApi.Model
 {
     /// <summary>
     /// Representa un curso realizado existente

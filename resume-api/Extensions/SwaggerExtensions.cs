@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Resume.Api.Extensions
+namespace Resume.WebApi.Extensions
 {
     /// <summary>
     /// Extensions for Swagger

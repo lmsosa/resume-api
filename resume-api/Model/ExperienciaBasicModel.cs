@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Resume.Api.Model
+namespace Resume.WebApi.Model
 {
     /// <summary>
     /// Representa una experiencia laboral

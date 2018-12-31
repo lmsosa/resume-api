@@ -3,11 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resume.Api", "resume-api\Resume.Api.csproj", "{1A4FEF78-17BD-4B0A-812E-7DB02B627BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resume.WebApi", "resume-api\Resume.WebApi.csproj", "{1A4FEF78-17BD-4B0A-812E-7DB02B627BA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resume.Domain", "resume.domain\Resume.Domain.csproj", "{0B129A52-36DF-4A5E-B58A-3DC42F03E5E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resume.Domain", "resume.domain\Resume.Domain.csproj", "{0B129A52-36DF-4A5E-B58A-3DC42F03E5E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resume.Data", "resume.data\Resume.Data.csproj", "{70F5D4F4-ED05-44A0-BA6E-E25FF6B8FF98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resume.Data", "resume.data\Resume.Data.csproj", "{70F5D4F4-ED05-44A0-BA6E-E25FF6B8FF98}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{2E735EDC-62A6-4965-859B-371FC80FA7BF}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		ToDos.txt = ToDos.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{FB1AE5D6-1590-46D0-847E-FC309795DB50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B40809C9-14FF-469C-ABCC-D51DAEBE5709}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{43DA574A-5303-4F2C-8375-CE9187F546E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{5FD396AA-67F9-4B2E-9156-BD726B78A3E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CB9F1F64-4DD1-41EB-A7A6-122450B4949A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resume.Application", "Resume.Application\Resume.Application.csproj", "{16CAFADA-D5D6-420E-94E3-08D4BF3F13F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +45,22 @@ Global
 		{70F5D4F4-ED05-44A0-BA6E-E25FF6B8FF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70F5D4F4-ED05-44A0-BA6E-E25FF6B8FF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70F5D4F4-ED05-44A0-BA6E-E25FF6B8FF98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16CAFADA-D5D6-420E-94E3-08D4BF3F13F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CAFADA-D5D6-420E-94E3-08D4BF3F13F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16CAFADA-D5D6-420E-94E3-08D4BF3F13F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16CAFADA-D5D6-420E-94E3-08D4BF3F13F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A4FEF78-17BD-4B0A-812E-7DB02B627BA8} = {43DA574A-5303-4F2C-8375-CE9187F546E9}
+		{0B129A52-36DF-4A5E-B58A-3DC42F03E5E0} = {5FD396AA-67F9-4B2E-9156-BD726B78A3E3}
+		{70F5D4F4-ED05-44A0-BA6E-E25FF6B8FF98} = {CB9F1F64-4DD1-41EB-A7A6-122450B4949A}
+		{43DA574A-5303-4F2C-8375-CE9187F546E9} = {FB1AE5D6-1590-46D0-847E-FC309795DB50}
+		{5FD396AA-67F9-4B2E-9156-BD726B78A3E3} = {FB1AE5D6-1590-46D0-847E-FC309795DB50}
+		{CB9F1F64-4DD1-41EB-A7A6-122450B4949A} = {FB1AE5D6-1590-46D0-847E-FC309795DB50}
+		{16CAFADA-D5D6-420E-94E3-08D4BF3F13F1} = {5FD396AA-67F9-4B2E-9156-BD726B78A3E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F86A7D8D-02C7-4E1F-8694-ECD32E6D3C6D}

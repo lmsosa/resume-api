@@ -2,6 +2,8 @@ Authentication / Authorization
 
 (done) Domain library / Automapper
 
+MediaTR
+
 Validation -> Return ProblemsDetail
 
 Filtering / Sorting / Pagination

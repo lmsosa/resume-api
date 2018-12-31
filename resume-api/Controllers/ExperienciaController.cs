@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Resume.Api.Model;
+using Resume.WebApi.Model;
 using Resume.Data.Context;
-using Resume.Domain;
+using Resume.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Resume.Api.Controllers
+namespace Resume.WebApi.Controllers
 {
     /// <summary>
     /// Exposes endpoints for managing experience data

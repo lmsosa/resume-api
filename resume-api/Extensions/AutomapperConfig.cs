@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Resume.Api.Extensions
+namespace Resume.WebApi.Extensions
 {
     /// <summary>
     /// Extensions for AutoMapper configuration

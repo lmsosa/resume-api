@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Resume.Api.Model;
-using Resume.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Resume.Application.Curriculums.Commands.ActualizarCurriculum;
+using Resume.Application.Curriculums.Commands.CrearCurriculum;
+using Resume.Domain.Entities;
+using Resume.WebApi.Model;
 
-namespace Resume.Api.Automapper
+namespace Resume.WebApi.Automapper
 {
     /// <summary>
     /// Mapeos de Curriculum
@@ -18,6 +16,11 @@ namespace Resume.Api.Automapper
         /// </summary>
         public CurriculumProfile()
         {
+            CreateMap<CurriculumBasicModel, CrearCurriculumCommand>();
+
+            CreateMap<CurriculumBasicModel, ActualizarCurriculumCommand>()
+                .ForMember(d => d.Id, o => o.Ignore());
+
             CreateMap<CurriculumBasicModel, Curriculum>()
                 .ForMember(d => d.Nombre, o => o.MapFrom(s => s.Nombre))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
@@ -38,7 +41,6 @@ namespace Resume.Api.Automapper
             CreateMap<Curriculum, CurriculumIdentifiableModel>();
 
             CreateMap<Experiencia, ExperienciaModel>();
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Resume.Domain
+namespace Resume.Domain.Entities
 {
     /// <summary>
     /// Represents a single work experience

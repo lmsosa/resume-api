@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Resume.Api.Model;
+using Resume.WebApi.Model;
 using Resume.Data.Context;
-using Resume.Domain;
+using Resume.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using MediatR;
+using Resume.Application.Curriculums.Commands.CrearCurriculum;
+using Resume.Application.Curriculums.Commands.ActualizarCurriculum;
 
-namespace Resume.Api.Controllers
+namespace Resume.WebApi.Controllers
 {
     /// <summary>
     /// Controller de Curriculums
@@ -21,6 +24,7 @@ namespace Resume.Api.Controllers
 
         private readonly ResumeContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
         #endregion
 
@@ -31,10 +35,12 @@ namespace Resume.Api.Controllers
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="mapper"></param>
-        public CurriculumController(ResumeContext dbContext, IMapper mapper)
+        /// <param name="mediator"></param>
+        public CurriculumController(ResumeContext dbContext, IMapper mapper, IMediator mediator)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         #endregion
@@ -45,40 +51,30 @@ namespace Resume.Api.Controllers
         /// Crea un nuevo curriculum
         /// </summary>
         /// <param name="curriculumModel">Curriculum</param>
-        /// <returns></returns>
+        /// <returns>El identificador del curriculum creado</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CurriculumIdentifiableModel>> Create(CurriculumBasicModel curriculumModel)
+        public async Task<ActionResult<int>> Create(CurriculumBasicModel curriculumModel)
         {
-            var curriculum = _mapper.Map<Curriculum>(curriculumModel);
-            _dbContext.Curriculum.Add(curriculum);
-            await _dbContext.SaveChangesAsync();
-
-            var result = _mapper.Map<CurriculumIdentifiableModel>(curriculum);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            var id = await _mediator.Send(_mapper.Map<CrearCurriculumCommand>(curriculumModel));
+            return CreatedAtAction(nameof(GetById), new { id }, id);
         }
 
         /// <summary>
-        /// Crea un nuevo curriculum
+        /// Actualiza un curriculum existente
         /// </summary>
         /// <param name="id">Identificador del curriculum</param>
-        /// <param name="curriculum">Curriculum a modificar</param>
-        /// <returns></returns>
+        /// <param name="curriculumModel">Curriculum a modificar</param>
+        /// <returns>Este método no devuelve ningún contenido</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, CurriculumBasicModel curriculum)
+        public async Task<IActionResult> Update(int id, CurriculumBasicModel curriculumModel)
         {
-            var curriculumExistente = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == id);
-            if (curriculumExistente is null)
-                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
-
-            curriculumExistente.Nombre = curriculum.Nombre;
-            curriculumExistente.Email = curriculum.Email;
-
-            await _dbContext.SaveChangesAsync();
+            var command = new ActualizarCurriculumCommand() { Id = id };
+            await _mediator.Send(_mapper.Map(curriculumModel, command));
             return NoContent();
         }
 
@@ -89,6 +85,7 @@ namespace Resume.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CurriculumModel>>> GetAll()
         {
+            //_mediator.Send(new GetA)
             var curriculums = await _dbContext.Curriculum.ToListAsync();
             return _mapper.Map<List<CurriculumModel>>(curriculums);
         }
