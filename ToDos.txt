@@ -2,7 +2,9 @@ Authentication / Authorization
 
 (done) Domain library / Automapper
 
-MediaTR
+(in progress) MediaTR
+
+(done) exception handling middleware
 
 Validation -> Return ProblemsDetail
 
