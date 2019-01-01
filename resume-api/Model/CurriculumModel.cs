@@ -8,8 +8,13 @@ namespace Resume.WebApi.Model
     /// <summary>
     /// Representa un curriculum existente
     /// </summary>
-    public class CurriculumModel : CurriculumIdentifiableModel
+    public class CurriculumModel : CurriculumBasicModel
     {
+        /// <summary>
+        /// Identificador del curriculum
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// Crea una instancia de <see cref="CurriculumModel"/>
         /// </summary>

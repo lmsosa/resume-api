@@ -1,12 +1,17 @@
 ﻿using Resume.Domain.Entities;
 
-namespace Resume.WebApi.Model
+namespace Resume.Application.Curriculums.Models
 {
     /// <summary>
     /// Representa un item de educación recibida
     /// </summary>
-    public class EducacionBasicModel
+    public class EducacionDTO
     {
+        /// <summary>
+        /// Identificador del item de educación
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// Nivel de la educación
         /// </summary>

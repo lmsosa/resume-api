@@ -5,16 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Curriculums\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="automapper" Version="8.0.0" />
     <PackageReference Include="mediatr" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\resume.data\Resume.Data.csproj" />
     <ProjectReference Include="..\resume.domain\Resume.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Experiencias\Queries\" />
   </ItemGroup>
 
 </Project>

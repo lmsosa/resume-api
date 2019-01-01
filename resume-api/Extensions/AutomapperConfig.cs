@@ -16,14 +16,15 @@ namespace Resume.WebApi.Extensions
         /// Loads existing AutoMapper profiles from an assembly
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="assemblyType"></param>
+        /// <param name="assemblyTypes"></param>
         /// <returns></returns>
-        public static IServiceCollection AddAutoMapperConfig(this IServiceCollection services, Type assemblyType)
+        public static IServiceCollection AddAutoMapperConfig(this IServiceCollection services, Type[] assemblyTypes)
         {
-            var profiles = assemblyType
-                .Assembly.GetTypes()
-                .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t));
+            var profiles = assemblyTypes
+                .SelectMany(x => 
+                    x.Assembly.GetTypes()
+                    .Where(t => typeof(Profile).IsAssignableFrom(t))
+                    .Select(t => (Profile)Activator.CreateInstance(t)));
             var config = new MapperConfiguration(cfg =>
             {
                 foreach (var profile in profiles)

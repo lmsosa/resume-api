@@ -7,6 +7,8 @@ using Resume.Data.Context;
 using Resume.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
+using Resume.Application.Experiencias.Commands;
 
 namespace Resume.WebApi.Controllers
 {
@@ -21,6 +23,7 @@ namespace Resume.WebApi.Controllers
 
         private readonly ResumeContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
         #endregion
 
@@ -31,10 +34,12 @@ namespace Resume.WebApi.Controllers
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="mapper"></param>
-        public ExperienciaController(ResumeContext dbContext, IMapper mapper)
+        /// <param name="mediator"></param>
+        public ExperienciaController(ResumeContext dbContext, IMapper mapper, IMediator mediator)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         #endregion
@@ -51,18 +56,11 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ExperienciaModel>> Create(int idCurriculum, ExperienciaBasicModel experienciaModel)
+        public async Task<ActionResult<int>> Create(int idCurriculum, ExperienciaBasicModel experienciaModel)
         {
-            var curriculum = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == idCurriculum);
-            if (curriculum == null)
-                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
-
-            var experiencia = _mapper.Map<Experiencia>(experienciaModel);
-            curriculum.Experiencias.Add(experiencia);
-            await _dbContext.SaveChangesAsync();
-
-            var response = _mapper.Map<ExperienciaModel>(experiencia);
-            return CreatedAtAction(nameof(GetById), new { idCurriculum = response.CurriculumId, id = response.Id }, response);
+            var command = _mapper.Map(experienciaModel, new CrearExperienciaCommand() { CurriculumId = idCurriculum });
+            var result = await _mediator.Send(command);            
+            return CreatedAtAction(nameof(GetById), new { idCurriculum, id = result }, result);
         }
 
         /// <summary>

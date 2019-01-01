@@ -11,6 +11,8 @@ using MediatR;
 using MediatR.Pipeline;
 using Resume.Application.Curriculums.Commands.CrearCurriculum;
 using Resume.Api.Middlewares;
+using System;
+using Resume.Application.Infrastructure;
 
 namespace Resume.WebApi
 {
@@ -45,15 +47,13 @@ namespace Resume.WebApi
             services.AddEntityFrameworkSqlServer()
                     .AddDbContext<ResumeContext>(options =>
                         options.UseSqlServer(Configuration.GetConnectionString("Resume")));
-            services.AddAutoMapperConfig(typeof(Startup));
+            services.AddAutoMapperConfig(new Type[] { typeof(Startup), typeof(MappingConfig) });
 
             // Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CrearCurriculumCommand).Assembly);
-
-
+                       
             services.AddSwaggerDocumentation();
         }
 

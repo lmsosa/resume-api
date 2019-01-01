@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Resume.Application.Curriculums.Commands.ActualizarCurriculum;
 using Resume.Application.Curriculums.Commands.CrearCurriculum;
+using Resume.Application.Curriculums.Models;
+using Resume.Application.Experiencias.Models;
 using Resume.Domain.Entities;
 using Resume.WebApi.Model;
 
@@ -36,11 +38,11 @@ namespace Resume.WebApi.Automapper
             CreateMap<CursoBasicModel, Curso>()
                 .ForMember(d => d.Id, o => o.Ignore());
 
-            CreateMap<Curriculum, CurriculumModel>();
+            CreateMap<CurriculumDTO, CurriculumModel>();
+            CreateMap<ExperienciaDTO, ExperienciaModel>();
+            CreateMap<CursoDTO, CursoModel>();
+            CreateMap<EducacionDTO, EducacionModel>();
 
-            CreateMap<Curriculum, CurriculumIdentifiableModel>();
-
-            CreateMap<Experiencia, ExperienciaModel>();
         }
     }
 }
