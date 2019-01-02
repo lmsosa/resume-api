@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Resume.WebApi.Model;
+using Resume.Application.Experiencias.Commands.ActualizarExperiencia;
+using Resume.Application.Experiencias.Commands.CrearExperiencia;
+using Resume.Application.Experiencias.Commands.EliminarExperiencia;
+using Resume.Application.Experiencias.Queries.GetExperienciaById;
+using Resume.Application.Experiencias.Queries.GetExperienciasList;
 using Resume.Data.Context;
-using Resume.Domain.Entities;
+using Resume.WebApi.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MediatR;
-using Resume.Application.Experiencias.Commands;
 
 namespace Resume.WebApi.Controllers
 {
@@ -21,7 +24,6 @@ namespace Resume.WebApi.Controllers
     {
         #region Fields
 
-        private readonly ResumeContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
@@ -32,12 +34,10 @@ namespace Resume.WebApi.Controllers
         /// <summary>
         /// Creates a new instance of <see cref="ExperienciaController"/>
         /// </summary>
-        /// <param name="dbContext"></param>
         /// <param name="mapper"></param>
         /// <param name="mediator"></param>
-        public ExperienciaController(ResumeContext dbContext, IMapper mapper, IMediator mediator)
+        public ExperienciaController(IMapper mapper, IMediator mediator)
         {
-            _dbContext = dbContext;
             _mapper = mapper;
             _mediator = mediator;
         }
@@ -59,7 +59,7 @@ namespace Resume.WebApi.Controllers
         public async Task<ActionResult<int>> Create(int idCurriculum, ExperienciaBasicModel experienciaModel)
         {
             var command = _mapper.Map(experienciaModel, new CrearExperienciaCommand() { CurriculumId = idCurriculum });
-            var result = await _mediator.Send(command);            
+            var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { idCurriculum, id = result }, result);
         }
 
@@ -76,12 +76,8 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(int idCurriculum, int id, ExperienciaBasicModel experienciaModel)
         {
-            var existingExperience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
-            if (existingExperience == null)
-                return NotFound(ErrorDetails.For("No se encontró la experiencia laboral"));
-
-            _mapper.Map(experienciaModel, existingExperience);
-            await _dbContext.SaveChangesAsync();
+            var command = _mapper.Map(experienciaModel, new ActualizarExperienciaCommand() { CurriculumId = idCurriculum, Id = id });
+            await _mediator.Send(command);
             return NoContent();
         }
 
@@ -96,12 +92,7 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int idCurriculum, int id)
         {
-            var existingExperience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
-            if (existingExperience == null)
-                return NotFound();
-
-            _dbContext.Experiences.Remove(existingExperience);
-            await _dbContext.SaveChangesAsync();
+            await _mediator.Send(new EliminarExperienciaCommand() { IdCurriculum = idCurriculum, Id = id });
             return NoContent();
         }
 
@@ -115,13 +106,8 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<ExperienciaModel>>> GetAll(int idCurriculum)
         {
-            var curriculum = await _dbContext.Curriculum
-                                        .Include(x => x.Experiencias)
-                                        .FirstOrDefaultAsync(x => x.Id == idCurriculum);
-            if (curriculum == null)
-                return NotFound(ErrorDetails.For("No se encontró el curriculum"));
-
-            return _mapper.Map<List<ExperienciaModel>>(curriculum.Experiencias);
+            var result = await _mediator.Send(new GetExperienciasListQuery() { IdCurriculum = idCurriculum });
+            return _mapper.Map<List<ExperienciaModel>>(result);
         }
 
         /// <summary>
@@ -135,10 +121,8 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ExperienciaModel>> GetById(int idCurriculum, int id)
         {
-            var experiencia = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == idCurriculum && x.Id == id);
-            if (experiencia == null)
-                return NotFound(ErrorDetails.For("No se encontró la experiencia"));
-            return _mapper.Map<ExperienciaModel>(experiencia);
+            var result = await _mediator.Send(new GetExperienciaByIdQuery() { IdCurriculum = idCurriculum, Id = id });
+            return _mapper.Map<ExperienciaModel>(result);
         }
 
         #endregion        

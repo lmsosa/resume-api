@@ -1,10 +1,15 @@
 ﻿using MediatR;
 using System;
 
-namespace Resume.Application.Experiencias.Commands
+namespace Resume.Application.Experiencias.Commands.ActualizarExperiencia
 {
-    public class CrearExperienciaCommand : IRequest<int>
+    public class ActualizarExperienciaCommand : IRequest
     {
+        /// <summary>
+        /// Identificador de la experiencia laboral
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// Id del curriculum
         /// </summary>

@@ -1,15 +1,12 @@
 ﻿using MediatR;
-using Resume.Data.Context;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Resume.Application.Exceptions;
+using Resume.Data.Context;
 using Resume.Domain.Entities;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Resume.Application.Experiencias.Commands
+namespace Resume.Application.Experiencias.Commands.CrearExperiencia
 {
     public class CrearExperienciaCommandHandler : IRequestHandler<CrearExperienciaCommand, int>
     {
