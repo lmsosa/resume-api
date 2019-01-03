@@ -19,7 +19,7 @@ namespace Resume.Application.Experiencias.Commands.ActualizarExperiencia
 
         public async Task<Unit> Handle(ActualizarExperienciaCommand request, CancellationToken cancellationToken)
         {
-            var existingExperience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == request.CurriculumId && x.Id == request.Id);
+            var existingExperience = await _dbContext.Experiences.FirstOrDefaultAsync(x => x.CurriculumId == request.IdCurriculum && x.Id == request.Id);
             if (existingExperience is null)
                 throw new NotFoundException(nameof(Experiencia), request.Id);
 

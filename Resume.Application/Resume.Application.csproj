@@ -14,4 +14,8 @@
     <ProjectReference Include="..\resume.domain\Resume.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Educaciones\Commands\" />
+  </ItemGroup>
+
 </Project>

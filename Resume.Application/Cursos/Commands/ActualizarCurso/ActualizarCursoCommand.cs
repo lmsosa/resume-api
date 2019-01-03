@@ -1,9 +1,8 @@
-﻿namespace Resume.Domain.Entities
+﻿using MediatR;
+
+namespace Resume.Application.Cursos.Commands.ActualizarCurso
 {
-    /// <summary>
-    /// Representa un curso realizado
-    /// </summary>
-    public class Curso
+    public class ActualizarCursoCommand : IRequest
     {
         /// <summary>
         /// Identificador del curso
@@ -18,6 +17,6 @@
         /// <summary>
         /// Identificador del curriculum
         /// </summary>
-        public int CurriculumId { get; set; }
+        public int IdCurriculum { get; set; }
     }
 }

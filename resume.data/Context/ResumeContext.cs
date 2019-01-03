@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Resume.Data.ModelBuilders;
 using Resume.Domain.Entities;
 
 namespace Resume.Data.Context
@@ -32,6 +31,16 @@ namespace Resume.Data.Context
         public DbSet<Curriculum> Curriculum { get; set; }
 
         /// <summary>
+        /// DbSet de Cursos
+        /// </summary>
+        public DbSet<Curso> Cursos { get; set; }
+
+        /// <summary>
+        /// DbSet de Educacion
+        /// </summary>
+        public DbSet<Educacion> Educaciones { get; set; }
+
+        /// <summary>
         /// Delegado del evento Configuring
         /// </summary>
         /// <param name="optionsBuilder"></param>
@@ -50,7 +59,7 @@ namespace Resume.Data.Context
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.BuildEducacion();
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ResumeContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }
     }

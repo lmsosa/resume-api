@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Migrations\20181223161816_InitialMigration.Designer.cs">
-      <DependentUpon>20181223161816_InitialMigration.cs</DependentUpon>
+    <Compile Update="Migrations\20190103015022_InitialStructure.Designer.cs">
+      <DependentUpon>20190103015022_InitialStructure.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

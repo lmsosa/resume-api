@@ -1,9 +1,11 @@
-﻿namespace Resume.Domain.Entities
+﻿using Resume.Domain.Entities;
+
+namespace Resume.Application.Educaciones.Models
 {
     /// <summary>
     /// Representa un item de educación recibida
     /// </summary>
-    public class Educacion
+    public class EducacionDTO
     {
         /// <summary>
         /// Identificador del item de educación
@@ -19,10 +21,5 @@
         /// Establecimiento donde se recibió la educación
         /// </summary>
         public string Establecimiento { get; set; }
-
-        /// <summary>
-        /// Identificador del curriculum
-        /// </summary>
-        public int CurriculumId { get; set; }
     }
 }

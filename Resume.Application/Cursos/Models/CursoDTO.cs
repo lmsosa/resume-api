@@ -1,4 +1,4 @@
-﻿namespace Resume.Application.Curriculums.Models
+﻿namespace Resume.Application.Cursos.Models
 {
     /// <summary>
     /// Representa un curso realizado

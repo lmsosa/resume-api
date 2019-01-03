@@ -13,7 +13,7 @@ namespace Resume.Application.Experiencias.Commands.ActualizarExperiencia
         /// <summary>
         /// Id del curriculum
         /// </summary>
-        public int CurriculumId { get; set; }
+        public int IdCurriculum { get; set; }
 
         /// <summary>
         /// Company

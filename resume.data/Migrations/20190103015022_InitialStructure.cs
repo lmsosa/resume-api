@@ -4,19 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Resume.Data.Migrations
 {
-    /// <summary>
-    /// Initial Migration
-    /// </summary>
-    public partial class InitialMigration : Migration
+    public partial class InitialStructure : Migration
     {
-        /// <summary>
-        /// Up
-        /// </summary>
-        /// <param name="migrationBuilder"></param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Curriculum",
+                name: "Curriculums",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -26,52 +19,52 @@ namespace Resume.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Curriculum", x => x.Id);
+                    table.PrimaryKey("PK_Curriculums", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Curso",
+                name: "Cursos",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(nullable: true),
-                    CurriculumId = table.Column<int>(nullable: true)
+                    CurriculumId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Curso", x => x.Id);
+                    table.PrimaryKey("PK_Cursos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Curso_Curriculum_CurriculumId",
+                        name: "FK_Cursos_Curriculums_CurriculumId",
                         column: x => x.CurriculumId,
-                        principalTable: "Curriculum",
+                        principalTable: "Curriculums",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Educacion",
+                name: "Educaciones",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Nivel = table.Column<string>(nullable: false),
                     Establecimiento = table.Column<string>(nullable: true),
-                    CurriculumId = table.Column<int>(nullable: true)
+                    CurriculumId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Educacion", x => x.Id);
+                    table.PrimaryKey("PK_Educaciones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Educacion_Curriculum_CurriculumId",
+                        name: "FK_Educaciones_Curriculums_CurriculumId",
                         column: x => x.CurriculumId,
-                        principalTable: "Curriculum",
+                        principalTable: "Curriculums",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Experiences",
+                name: "Experiencias",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -85,48 +78,44 @@ namespace Resume.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Experiences", x => x.Id);
+                    table.PrimaryKey("PK_Experiencias", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Experiences_Curriculum_CurriculumId",
+                        name: "FK_Experiencias_Curriculums_CurriculumId",
                         column: x => x.CurriculumId,
-                        principalTable: "Curriculum",
+                        principalTable: "Curriculums",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Curso_CurriculumId",
-                table: "Curso",
+                name: "IX_Cursos_CurriculumId",
+                table: "Cursos",
                 column: "CurriculumId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Educacion_CurriculumId",
-                table: "Educacion",
+                name: "IX_Educaciones_CurriculumId",
+                table: "Educaciones",
                 column: "CurriculumId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Experiences_CurriculumId",
-                table: "Experiences",
+                name: "IX_Experiencias_CurriculumId",
+                table: "Experiencias",
                 column: "CurriculumId");
         }
 
-        /// <summary>
-        /// Down
-        /// </summary>
-        /// <param name="migrationBuilder"></param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Curso");
+                name: "Cursos");
 
             migrationBuilder.DropTable(
-                name: "Educacion");
+                name: "Educaciones");
 
             migrationBuilder.DropTable(
-                name: "Experiences");
+                name: "Experiencias");
 
             migrationBuilder.DropTable(
-                name: "Curriculum");
+                name: "Curriculums");
         }
     }
 }

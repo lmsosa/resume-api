@@ -19,9 +19,9 @@ namespace Resume.Application.Experiencias.Commands.CrearExperiencia
 
         public async Task<int> Handle(CrearExperienciaCommand request, CancellationToken cancellationToken)
         {
-            var curriculum = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == request.CurriculumId);
-            if (curriculum == null)
-                throw new NotFoundException(nameof(Curriculum), request.CurriculumId);
+            var curriculum = await _dbContext.Curriculum.FirstOrDefaultAsync(x => x.Id == request.IdCurriculum);
+            if (curriculum is null)
+                throw new NotFoundException(nameof(Curriculum), request.IdCurriculum);
 
             var experiencia = new Experiencia()
             {
@@ -30,11 +30,11 @@ namespace Resume.Application.Experiencias.Commands.CrearExperiencia
                 DescripcionTareas = request.DescripcionTareas,
                 FechaInicio = request.FechaInicio,
                 FechaFin = request.FechaFin,
-                CurriculumId = request.CurriculumId
+                CurriculumId = request.IdCurriculum
             };
             curriculum.Experiencias.Add(experiencia);
             await _dbContext.SaveChangesAsync();
-            return curriculum.Id;
+            return experiencia.Id;
         }
     }
 }

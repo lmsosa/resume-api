@@ -1,4 +1,6 @@
-﻿using Resume.Application.Experiencias.Models;
+﻿using Resume.Application.Cursos.Models;
+using Resume.Application.Educaciones.Models;
+using Resume.Application.Experiencias.Models;
 using System.Collections.Generic;
 
 namespace Resume.Application.Curriculums.Models

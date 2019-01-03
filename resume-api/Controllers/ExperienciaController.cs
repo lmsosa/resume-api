@@ -2,13 +2,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Resume.Application.Experiencias.Commands.ActualizarExperiencia;
 using Resume.Application.Experiencias.Commands.CrearExperiencia;
 using Resume.Application.Experiencias.Commands.EliminarExperiencia;
 using Resume.Application.Experiencias.Queries.GetExperienciaById;
 using Resume.Application.Experiencias.Queries.GetExperienciasList;
-using Resume.Data.Context;
 using Resume.WebApi.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +14,7 @@ using System.Threading.Tasks;
 namespace Resume.WebApi.Controllers
 {
     /// <summary>
-    /// Exposes endpoints for managing experience data
+    /// Endpoints de manejo de experiencias laborales
     /// </summary>
     [Route("api/curriculum/{idCurriculum}/[controller]")]
     [ApiController]
@@ -58,7 +56,7 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<int>> Create(int idCurriculum, ExperienciaBasicModel experienciaModel)
         {
-            var command = _mapper.Map(experienciaModel, new CrearExperienciaCommand() { CurriculumId = idCurriculum });
+            var command = _mapper.Map(experienciaModel, new CrearExperienciaCommand() { IdCurriculum = idCurriculum });
             var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { idCurriculum, id = result }, result);
         }
@@ -76,13 +74,13 @@ namespace Resume.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(int idCurriculum, int id, ExperienciaBasicModel experienciaModel)
         {
-            var command = _mapper.Map(experienciaModel, new ActualizarExperienciaCommand() { CurriculumId = idCurriculum, Id = id });
+            var command = _mapper.Map(experienciaModel, new ActualizarExperienciaCommand() { IdCurriculum = idCurriculum, Id = id });
             await _mediator.Send(command);
             return NoContent();
         }
 
         /// <summary>
-        /// 
+        /// Elimina una experiencia laboral
         /// </summary>
         /// <param name="idCurriculum">Identificador del curriculum sobre el cual se desea eliminar la experiencia laboral</param>
         /// <param name="id">Idetificador de la experiencia laboral</param>

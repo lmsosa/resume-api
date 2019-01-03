@@ -1,16 +1,19 @@
-﻿using Resume.Domain.Entities;
+﻿using MediatR;
+using Resume.Domain.Entities;
 
-namespace Resume.Application.Curriculums.Models
+namespace Resume.Application.Educaciones.Commands.ActualizarEducacion
 {
-    /// <summary>
-    /// Representa un item de educación recibida
-    /// </summary>
-    public class EducacionDTO
+    public class ActualizarEducacionCommand : IRequest
     {
         /// <summary>
-        /// Identificador del item de educación
+        /// Identificador del Educacion
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Identificador del curriculum
+        /// </summary>
+        public int IdCurriculum { get; set; }
 
         /// <summary>
         /// Nivel de la educación
