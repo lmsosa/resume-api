@@ -10,12 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\resume.data\Resume.Data.csproj" />
-    <ProjectReference Include="..\resume.domain\Resume.Domain.csproj" />
+    <Folder Include="Educaciones\Commands\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Educaciones\Commands\" />
+    <ProjectReference Include="..\Resume.Data\Resume.Data.csproj" />
+    <ProjectReference Include="..\Resume.Domain\Resume.Domain.csproj" />
   </ItemGroup>
 
 </Project>

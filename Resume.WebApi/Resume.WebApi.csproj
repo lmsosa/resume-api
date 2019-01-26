@@ -24,8 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Resume.Application\Resume.Application.csproj" />
-    <ProjectReference Include="..\resume.data\Resume.Data.csproj" />
-    <ProjectReference Include="..\resume.domain\Resume.Domain.csproj" />
   </ItemGroup>
 
 </Project>

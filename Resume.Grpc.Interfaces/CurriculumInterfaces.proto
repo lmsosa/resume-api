@@ -1,0 +1,37 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.curriculum";
+option java_outer_classname = "CurriculumProto";
+option objc_class_prefix = "HLW";
+
+package curriculum;
+
+message CrearCurriculumRequest {
+  string nombre = 1;
+  string email = 2;
+}
+
+message CrearCurriculumResponse {
+  int32 id = 1;
+}
+
+message CrearExperienciaRequest {
+  int32 idCurriculum = 1;
+  string empresa = 2;
+  string cargo = 3;
+  google.protobuf.Timestamp fechaInicio = 4;
+  google.protobuf.Timestamp fechaFin = 5;
+  string descripcionTareas = 6;
+}
+
+message CrearExperienciaResponse {
+  int32 id = 1;
+}
+
+service CurriculumService  {
+  rpc CrearCurriculum (CrearCurriculumRequest) returns (CrearCurriculumResponse) {}
+  rpc CrearExperiencia (CrearExperienciaRequest) returns (CrearExperienciaResponse) {}
+}
+

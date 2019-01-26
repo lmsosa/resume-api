@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Resume.Grpc.Interfaces</RootNamespace>
+    <AssemblyName>Resume.Grpc.Interfaces</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CurriculumInterfaces.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.6.1" />
+    <PackageReference Include="Grpc" Version="1.18.0" />
+    <PackageReference Include="Grpc.Tools" Version="1.18.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProtoBuf Include="CurriculumInterfaces.proto" />
+  </ItemGroup>
+
+</Project>

@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Resume.Application.Curriculums.Commands.ActualizarCurriculum;
+using Resume.Application.Curriculums.Commands.CrearCurriculum;
+using Resume.Application.Curriculums.Commands.EliminarCurriculum;
+using Resume.Application.Curriculums.Queries.GetCurriculumById;
+using Resume.Application.Curriculums.Queries.GetCurriculumsList;
 using Resume.WebApi.Model;
-using Resume.Data.Context;
-using Resume.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using MediatR;
-using Resume.Application.Curriculums.Commands.CrearCurriculum;
-using Resume.Application.Curriculums.Commands.ActualizarCurriculum;
-using Resume.Application.Curriculums.Queries.GetCurriculumsList;
-using Resume.Application.Curriculums.Queries.GetCurriculumById;
-using Resume.Application.Curriculums.Commands.EliminarCurriculum;
 
 namespace Resume.WebApi.Controllers
 {
