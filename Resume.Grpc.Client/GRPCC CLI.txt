@@ -11,6 +11,6 @@ client.crearCurriculum({ nombre: 'carlo', email: 'asdf'}, printReply)
 
 // cambiar el id de curriculum
 
-client.crearExperiencia({ idCurriculum: 5, empresa: 'Santex', cargo: 'Back-End Developer', fechaInicio: { seconds: 1548541439, nanos: 0 }, fechaFin: { seconds: 1548541439, nanos: 0 }, descripcionTareas: 'Descripcion de las tareas' }, printReply)
+client.crearExperiencia({ idCurriculum: 7, empresa: 'Santex', cargo: 'Back-End Developer', fechaInicio: { seconds: 1548541439, nanos: 0 }, fechaFin: { seconds: 1548541439, nanos: 0 }, descripcionTareas: 'Descripcion de las tareas' }, printReply)
 
       
