@@ -20,10 +20,20 @@ namespace Resume.GraphQL.Models
                 "curriculums",
                 resolve: context => dbContext.Curriculum);
 
-            Field<ListGraphType<CurriculumType>>(
+            Field<ListGraphType<ExperienciaType>>(
                 "experiencias",
-                resolve: context => dbContext.Experiences);
+                arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "contiene" }),
+                resolve: context => context.GetArgument<string>("contiene", null) == null ?
+                                        dbContext.Experiences :
+                                        dbContext.Experiences.Where(x => x.Cargo.Contains(context.GetArgument<string>("contiene", null))));
 
+            Field<ListGraphType<EducacionType>>(
+                "educaciones",
+                resolve: context => dbContext.Educaciones);
+
+            Field<ListGraphType<CursoType>>(
+                "cursos",
+                resolve: context => dbContext.Cursos);
         }
     }
 }

@@ -40,6 +40,9 @@ namespace Resume.GraphQL
             // services.AddSingleton<ResumeMutation>();
             services.AddSingleton<CurriculumType>();
             services.AddSingleton<ExperienciaType>();
+            services.AddSingleton<EducacionType>();
+            services.AddSingleton<CursoType>();
+            services.AddSingleton<EducacionNivelEnumType>();
 
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new ResumeSchema(new FuncDependencyResolver(type => sp.GetService(type))));

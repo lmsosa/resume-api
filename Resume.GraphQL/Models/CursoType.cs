@@ -5,18 +5,13 @@ using System.Linq;
 
 namespace Resume.GraphQL.Models
 {
-    public class ExperienciaType : ObjectGraphType<Experiencia>
+    public class CursoType : ObjectGraphType<Curso>
     {
-        public ExperienciaType(ResumeContext dbContext)
+        public CursoType(ResumeContext dbContext)
         {
             Field(x => x.Id);
             Field(x => x.CurriculumId);
-            Field(x => x.Empresa);
-            Field(x => x.Cargo);
-            Field(x => x.DescripcionTareas);
-            Field<StringGraphType>("fechaInicio", resolve: context => context.Source.FechaInicio?.ToShortDateString());
-            Field<StringGraphType>("fechaFin", resolve: context => context.Source.FechaFin?.ToShortDateString());
-
+            Field(x => x.Nombre);
             Field<ListGraphType<CurriculumType>>("curriculum",
                 arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "idCurriculum" }),
                 resolve: context => dbContext.Curriculum.Where(x => x.Id == context.Source.CurriculumId),

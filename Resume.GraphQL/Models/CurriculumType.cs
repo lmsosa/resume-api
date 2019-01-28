@@ -17,6 +17,16 @@ namespace Resume.GraphQL.Models
                 arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "idCurriculum" }),
                 resolve: context => dbContext.Experiences.Where(x => x.CurriculumId == context.Source.Id),
                 description: "Experiencia laboral");
+
+            Field<ListGraphType<EducacionType>>("educacion",
+                arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "idCurriculum" }),
+                resolve: context => dbContext.Educaciones.Where(x => x.CurriculumId == context.Source.Id),
+                description: "Educación");
+
+            Field<ListGraphType<CursoType>>("cursos",
+                arguments: new QueryArguments(new QueryArgument<IntGraphType> { Name = "idCurriculum" }),
+                resolve: context => dbContext.Cursos.Where(x => x.CurriculumId == context.Source.Id),
+                description: "Cursos");
         }
     }
 }
