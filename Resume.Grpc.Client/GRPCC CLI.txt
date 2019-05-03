@@ -5,7 +5,7 @@ grpcc --proto "CurriculumInterfaces.proto" --address 127.0.0.1:5050 -i
 
 // pegar con top menu
 
-client.crearCurriculum({ nombre: 'carlo', email: 'asdf'}, printReply)
+client.crearCurriculum({ nombre: 'Anita', email: 'anita@gmail'}, printReply)
 
 
 
